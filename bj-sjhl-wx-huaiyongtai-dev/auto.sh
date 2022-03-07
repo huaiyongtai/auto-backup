@@ -3,8 +3,8 @@
 # 该脚本将会同步指定的目录到一个确定的目录A下，同时将A目录下文件自动上传
 #
 ################################
-
 #!/bin/bash
+
 # 备份路径 当前home+auto-backup+主机名称(省略.后面的内容)
 backPath="$HOME/auto-backup"
 if [ ! -d $backPath -o ! -d "$backPath/.git" ]; then       #判断木匾文件是否存在，不存在自动创建
@@ -56,7 +56,7 @@ git commit -m "auto sync"
 git push origin master
 
 # 写入定时任务
-ctask="/bin/sh `pwd`/${0} >> /dev/null 2>&1"
+echo "/bin/sh $(cd "$(dirname $0)"; pwd)/$(basename $0) >> /dev/null 2>&1";
 if [ $(crontab -l | grep -c "$ctask") -eq 0 ]; then
     $((crontab -l && echo "*/2 * * * * ${ctask}") | crontab)
 fi
