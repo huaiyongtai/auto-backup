@@ -48,6 +48,12 @@ do
     rsync -avz --delete $file "$dstPath/"
 done
 
+# 写入定时任务
+ctask="/bin/sh $(cd "$(dirname $0)"; pwd)/$(basename $0) >> /dev/null 2>&1";
+if [ $(crontab -l | grep -c "$ctask") -eq 0 ]; then
+    $((crontab -l && echo "*/2 * * * * ${ctask}") | crontab)
+fi
+
 # 目标文件上传
 cd $backPath
 git rm -r *.swp
@@ -55,8 +61,3 @@ git add --all .
 git commit -m "auto sync"
 git push origin master
 
-# 写入定时任务
-ctask="/bin/sh $(cd "$(dirname $0)"; pwd)/$(basename $0) >> /dev/null 2>&1";
-if [ $(crontab -l | grep -c "$ctask") -eq 0 ]; then
-    $((crontab -l && echo "*/2 * * * * ${ctask}") | crontab)
-fi
