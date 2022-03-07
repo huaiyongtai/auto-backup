@@ -56,7 +56,7 @@ git commit -m "auto sync"
 git push origin master
 
 # 写入定时任务
-echo "/bin/sh $(cd "$(dirname $0)"; pwd)/$(basename $0) >> /dev/null 2>&1";
+ctask="/bin/sh $(cd "$(dirname $0)"; pwd)/$(basename $0) >> /dev/null 2>&1";
 if [ $(crontab -l | grep -c "$ctask") -eq 0 ]; then
     $((crontab -l && echo "*/2 * * * * ${ctask}") | crontab)
 fi
